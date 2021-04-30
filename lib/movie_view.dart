@@ -27,34 +27,33 @@ class _MyHomePageState extends State<MovieView> {
                   child: ListView.builder(
                     itemCount: snapshot.data.movies.length,
                     itemBuilder: (context, index) {
-                      return Container(
-                          padding: EdgeInsets.all(50),
-                          width: 250,
-                          height: 250,
-                          color: Colors.white,
-                          child: Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.blue,
-                                ),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      snapshot.data.movies[index].title,
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 25),
-                                    ),
-                                  ],
-                                ),
+                      return Column(children: [
+                        Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.blue,
                               ),
-                              Text(
-                                snapshot.data.movies[index].data,
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 35),
+                              child: Column(
+                                children: [
+                                  Image.network(
+                                      snapshot.data.movies[index].urlImage),
+                                  Text(
+                                    snapshot.data.movies[index].title,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 25),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ));
+                            ),
+                            Text(
+                              snapshot.data.movies[index].data,
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 35),
+                            ),
+                          ],
+                        )
+                      ]);
                     },
                   ),
                 );

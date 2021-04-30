@@ -18,7 +18,8 @@ class Results {
 
   Results.fromJson(Map<String, dynamic> json) {
     title = json['title'];
-    urlImage = json['https://image.tmdb.org/t/p/w300' + 'poster_path'];
+    urlImage = complet + json['poster_path'];
     data = json['release_date'];
+    print(urlImage);
   }
 }
