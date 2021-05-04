@@ -15,11 +15,14 @@ class Results {
   String title;
   String urlImage;
   String data;
+  var rating;
+  int page;
 
   Results.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     urlImage = complet + json['poster_path'];
     data = json['release_date'];
-    print(urlImage);
+    rating = json['vote_average'];
+    page = json['page'];
   }
 }

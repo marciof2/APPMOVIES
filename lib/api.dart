@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'movie.dart';
 
 class MovieAPI {
+  Map<String, String> query;
   Map<String, String> queryParameters;
   Future<Movie> fetchMovie() async {
     final response = await http.get(
@@ -17,7 +17,7 @@ class MovieAPI {
     if (response.statusCode == 200) {
       return Movie.fromJson(jsonDecode(response.body));
     } else {
-      return Future.error(Text('Movie Not Found'));
+      return Future.error('Tente Novamente');
     }
   }
 }
