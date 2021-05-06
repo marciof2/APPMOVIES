@@ -26,7 +26,7 @@ class _MyHomePageState extends State<MovieView> {
             margin: EdgeInsets.all(5),
             padding: EdgeInsets.all(9),
             child: Text(
-              'App Movie',
+              'LANÇAMENTOS',
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
@@ -60,7 +60,6 @@ class _MyHomePageState extends State<MovieView> {
                             begin: Alignment.bottomCenter,
                             end: Alignment.topCenter,
                             colors: [
-                              Colors.red[300],
                               Colors.red,
                               Colors.red[400],
                               Colors.red[600],
@@ -71,41 +70,62 @@ class _MyHomePageState extends State<MovieView> {
                           BoxShadow(color: Colors.grey.withOpacity(0.3))
                         ]),
                     child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
                         itemCount: snapshot.data.movies.length,
                         itemBuilder: (context, index) {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              //Capa do filme
+                              //TITULO
                               Container(
                                 decoration: BoxDecoration(),
+                                width: MediaQuery.of(context).size.width,
+                                child: Center(
+                                  child: Text(
+                                    snapshot.data.movies[index].title,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20),
+                                  ),
+                                ),
+                              ),
+                              //Capa do filme
+                              Container(
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 0.6,
+                                      color: Colors.black.withOpacity(0.2),
+                                      spreadRadius: -10,
+                                    )
+                                  ],
+                                ),
                                 padding: EdgeInsets.all(5),
                                 child: Stack(children: [
                                   Center(
-                                    child: Image.network(
-                                      snapshot.data.movies[index].urlImage,
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                  //Posição do Título
-                                  Positioned(
-                                    bottom: -5.0,
-                                    child: Container(
-                                      margin: EdgeInsets.all(10),
-                                      decoration: BoxDecoration(),
-                                      width: MediaQuery.of(context).size.width,
-                                      child: Center(
-                                        child: Text(
-                                          snapshot.data.movies[index].title,
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 20),
-                                        ),
+                                    child: TextButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Overview(snapshot
+                                                          .data
+                                                          .movies[index]
+                                                          .resumo)));
+                                        });
+                                      },
+                                      child: Image.network(
+                                        snapshot.data.movies[index].urlImage,
+                                        fit: BoxFit.fill,
                                       ),
                                     ),
                                   ),
-                                  //Posição da Data
+                                  //TÍTULO
+
+                                  //DATA
                                   Positioned(
                                     top: 05.0,
                                     right: 50.0,
@@ -125,8 +145,9 @@ class _MyHomePageState extends State<MovieView> {
                                       ),
                                     ),
                                   ),
+                                  //RATING
                                   Positioned(
-                                    left: 50,
+                                    left: 10,
                                     child: Container(
                                       width: 50,
                                       height: 50,
@@ -182,6 +203,43 @@ class _MyHomePageState extends State<MovieView> {
               },
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class Overview extends StatelessWidget {
+  final String c;
+  Overview(this.c);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Center(child: Text('Overview')),
+      ),
+      body: Center(
+        child: Container(
+          padding: EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.blue,
+            boxShadow: [
+              BoxShadow(
+                  blurRadius: 5,
+                  color: Colors.black.withOpacity(.3),
+                  spreadRadius: 3,
+                  offset: Offset(1, 3))
+            ],
+          ),
+          width: 400,
+          child: Text(
+            c,
+            style: TextStyle(
+              fontSize: 25,
+              color: Colors.black,
+            ),
+          ),
         ),
       ),
     );

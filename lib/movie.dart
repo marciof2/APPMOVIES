@@ -7,6 +7,7 @@ class Movie {
     movies = arrayMovie.map((item) {
       return Results.fromJson(item);
     }).toList();
+
   }
 }
 
@@ -15,14 +16,15 @@ class Results {
   String title;
   String urlImage;
   String data;
+  String resumo;
   var rating;
-  int page;
 
   Results.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     urlImage = complet + json['poster_path'];
     data = json['release_date'];
     rating = json['vote_average'];
-    page = json['page'];
+    resumo = json['overview'];
+    print(resumo);
   }
 }

@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 import 'movie.dart';
 
 class MovieAPI {
-  Map<String, String> query;
   Map<String, String> queryParameters;
   Future<Movie> fetchMovie() async {
     final response = await http.get(

@@ -1,7 +1,6 @@
 import 'package:appmovie/movie_view.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:flutter/services.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -57,9 +56,8 @@ class _MyCustomWidgetState extends State<MyCustomWidget>
 
   @override
   Widget build(BuildContext c) {
-    double _w = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.blueGrey[900],
+      backgroundColor: Colors.black12,
       body: Center(
         child: InkWell(
           onTap: () {
@@ -78,11 +76,17 @@ class _MyCustomWidgetState extends State<MyCustomWidget>
                 builder: (c, child) => Transform.scale(
                   scale: scaleAnimation.value,
                   child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.black,
-                    ),
-                  ),
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.red,
+                                Colors.red[600],
+                                Colors.red[700],
+                                Colors.red[800]
+                              ]))),
                 ),
               ),
             ),
