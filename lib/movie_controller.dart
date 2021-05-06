@@ -1,4 +1,4 @@
-import 'package:appmovie/model.dart';
+import 'package:appmovie/movie_model.dart';
 import 'package:appmovie/movie.dart';
 
 class MovieController {

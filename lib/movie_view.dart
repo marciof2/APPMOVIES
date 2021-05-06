@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:appmovie/controller.dart';
+import 'package:appmovie/movie_controller.dart';
 import 'package:appmovie/movie.dart';
 import 'package:flutter/material.dart';
 
@@ -108,23 +108,20 @@ class _MyHomePageState extends State<MovieView> {
                                       onPressed: () {
                                         setState(() {
                                           Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      Overview(snapshot
-                                                          .data
-                                                          .movies[index]
-                                                          .resumo)));
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => Overview(
+                                                  snapshot.data.movies[index]
+                                                      .resumo),
+                                            ),
+                                          );
                                         });
                                       },
                                       child: Image.network(
                                         snapshot.data.movies[index].urlImage,
-                                        fit: BoxFit.fill,
                                       ),
                                     ),
                                   ),
-                                  //TÍTULO
-
                                   //DATA
                                   Positioned(
                                     top: 05.0,
