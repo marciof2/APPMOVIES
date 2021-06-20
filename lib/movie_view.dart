@@ -1,7 +1,10 @@
 import 'dart:ui';
-import 'package:appmovie/movie_controller.dart';
+import 'package:appmovie/internal_storage.dart';
 import 'package:appmovie/movie.dart';
+import 'package:appmovie/movie_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'movie.dart';
 
 class MovieView extends StatefulWidget {
   @override
@@ -20,7 +23,7 @@ class _MyHomePageState extends State<MovieView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.redAccent,
+        backgroundColor: Color.fromRGBO(143, 49, 49, 56),
         title: Center(
           child: Container(
             margin: EdgeInsets.all(5),
@@ -28,7 +31,7 @@ class _MyHomePageState extends State<MovieView> {
             child: Text(
               'LANÇAMENTOS',
               style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontSize: 20,
                   fontWeight: FontWeight.w900),
             ),
@@ -38,15 +41,15 @@ class _MyHomePageState extends State<MovieView> {
       body: SafeArea(
         child: Stack(
           children: [
-            FutureBuilder<Movie>(
-              future: controller.movie,
+            StreamBuilder<List<UpComingMovies>>(
+              stream: controller.streamLista.stream,
               builder: (context, snapshot) {
-                if (snapshot.connectionState != ConnectionState.done) {
+                if (snapshot.connectionState != ConnectionState.active) {
                   return Center(
                     child: Container(
                       margin: EdgeInsets.all(10),
-                      height: 150,
-                      width: 150,
+                      height: 50,
+                      width: 50,
                       child: Center(
                         child: CircularProgressIndicator(),
                       ),
@@ -56,73 +59,39 @@ class _MyHomePageState extends State<MovieView> {
                 if (snapshot.hasData) {
                   return Container(
                     decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            colors: [
-                              Colors.red,
-                              Colors.red[400],
-                              Colors.red[600],
-                              Colors.red[800],
-                              Colors.red[900],
-                            ]),
+                        color: Color.fromRGBO(162, 103, 103, 63),
                         boxShadow: [
                           BoxShadow(color: Colors.grey.withOpacity(0.3))
                         ]),
                     child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: snapshot.data.movies.length,
+                        itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
+                          var count = snapshot.data![index];
+                          if (index == snapshot.data!.length - 5) {
+                            controller.newPage();
+                            print('Chegamos no final da lista ');
+                          }
                           return Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               //TITULO
-                              Container(
-                                decoration: BoxDecoration(),
-                                width: MediaQuery.of(context).size.width,
-                                child: Center(
-                                  child: Text(
-                                    snapshot.data.movies[index].title,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 20),
-                                  ),
-                                ),
-                              ),
-                              //Capa do filme
+                              Title(count.title),
+
                               Container(
                                 decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      blurRadius: 0.6,
-                                      color: Colors.black.withOpacity(0.2),
-                                      spreadRadius: -10,
-                                    )
-                                  ],
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: [],
                                 ),
-                                padding: EdgeInsets.all(5),
+                                padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
                                 child: Stack(children: [
-                                  Center(
-                                    child: TextButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => Overview(
-                                                  snapshot.data.movies[index]
-                                                      .resumo),
-                                            ),
-                                          );
-                                        });
-                                      },
-                                      child: Image.network(
-                                        snapshot.data.movies[index].urlImage,
-                                      ),
-                                    ),
-                                  ),
-                                  //DATA
+                                  ContainerMovie(
+                                      count.urlImage,
+                                      count.rating,
+                                      count.resumo,
+                                      count.data,
+                                      count.title,
+                                      count.id),
+
                                   Positioned(
                                     top: 05.0,
                                     right: 50.0,
@@ -134,7 +103,7 @@ class _MyHomePageState extends State<MovieView> {
                                         borderRadius: BorderRadius.circular(20),
                                       ),
                                       child: Text(
-                                        snapshot.data.movies[index].data,
+                                        count.data!,
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 20,
@@ -167,7 +136,7 @@ class _MyHomePageState extends State<MovieView> {
                                                   color: Colors.black),
                                               child: Center(
                                                 child: Text(
-                                                  '${snapshot.data.movies[index].rating}',
+                                                  '${count.rating}',
                                                   style: TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 20,
@@ -206,36 +175,189 @@ class _MyHomePageState extends State<MovieView> {
   }
 }
 
-class Overview extends StatelessWidget {
-  final String c;
-  Overview(this.c);
+class Title extends StatelessWidget {
+  final title;
+
+  Title(this.title);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Center(child: Text('Overview')),
+    return Container(
+      width: MediaQuery.of(context).size.width - 100,
+      height: 120,
+      child: Center(
+        child: Text(
+          title,
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.black, fontSize: 20),
+        ),
       ),
-      body: Center(
+    );
+  }
+}
+
+class ContainerMovie extends StatelessWidget {
+  final image;
+  final rating;
+  final resumo;
+  final data;
+  final title;
+  final id;
+  const ContainerMovie(
+      this.image, this.rating, this.resumo, this.data, this.title, this.id);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      Overview(image, rating, resumo, data, title, id)));
+        },
+        //CAPA
         child: Container(
-          padding: EdgeInsets.all(5),
+          width: 250,
+          height: 350,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.blue,
             boxShadow: [
               BoxShadow(
-                  blurRadius: 5,
-                  color: Colors.black.withOpacity(.3),
-                  spreadRadius: 3,
-                  offset: Offset(1, 3))
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: Offset.fromDirection(-6, 3),
+                color: Color.fromARGB(100, 22, 54, 39),
+              ),
             ],
-          ),
-          width: 400,
-          child: Text(
-            c,
-            style: TextStyle(
-              fontSize: 25,
-              color: Colors.black,
+            borderRadius: BorderRadius.circular(12),
+            image: DecorationImage(
+              fit: BoxFit.fill,
+              image: NetworkImage(image != null
+                  ? 'https://image.tmdb.org/t/p/w300' + image
+                  : ' '),
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class Overview extends StatefulWidget {
+  final title;
+  final rating;
+  final resumo;
+  final data;
+  final image;
+  final id;
+  Overview(
+      this.image, this.rating, this.resumo, this.data, this.title, this.id);
+
+  @override
+  _OverviewState createState() => _OverviewState();
+}
+
+class _OverviewState extends State<Overview> {
+  IconData? isFav = Icons.star_outline;
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.blueGrey[600],
+        appBar: AppBar(
+          backgroundColor: Colors.red[300],
+          title: Text(widget.title),
+        ),
+        body: SingleChildScrollView(
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.7,
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: NetworkImage(widget.image != null
+                                ? 'https://image.tmdb.org/t/p/w300' +
+                                    widget.image
+                                : ' '),
+                            fit: BoxFit.cover)),
+                  ),
+                  Container(
+                    color: Colors.red[300],
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          //RATING
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle, color: Colors.black),
+                            child: Center(
+                              child: Container(
+                                width: 45,
+                                height: 45,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.greenAccent),
+                                child: Center(
+                                  child: Container(
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.black),
+                                    child: Center(
+                                      child: Text(
+                                        '${widget.rating}',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          //DATA
+                          Container(
+                            child: Text(
+                              widget.data,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w800),
+                            ),
+                          )
+                          //FAVORITE
+                          ,
+                          IconButton(
+                            icon: Icon(isFav),
+                            onPressed: () {
+                              InternalStorage()
+                                  .saveFav('$widget.id', widget.title);
+                              setState(() {
+                                isFav = InternalStorage().fav == true
+                                    ? Icons.star_outline
+                                    : Icons.star;
+                              });
+                            },
+                          ),
+                        ]),
+                  ),
+                  Text(widget.resumo,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ],
           ),
         ),
       ),

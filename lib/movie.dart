@@ -1,30 +1,36 @@
-class Movie {
-  List<Results> movies;
+class Lancamentos {
+  List<UpComingMovies>? upcomingMovies;
 
-  Movie.fromJson(Map<String, dynamic> json) {
+  Lancamentos.fromJson(Map<String, dynamic> json) {
     var arrayMovie = json['results'] as List;
 
-    movies = arrayMovie.map((item) {
-      return Results.fromJson(item);
+    upcomingMovies = arrayMovie.map((item) {
+      return UpComingMovies.fromJson(item);
     }).toList();
-
   }
+
+  int? get id => null;
+
+  set isFavorite(bool isFavorite) {}
 }
 
-class Results {
-  String complet = 'https://image.tmdb.org/t/p/w300';
-  String title;
-  String urlImage;
-  String data;
-  String resumo;
+class UpComingMovies {
+  String? complet = 'https://image.tmdb.org/t/p/w300';
+  String? title;
+  String? urlImage;
+  String? data;
+  String? resumo;
+  var id;
   var rating;
+  bool? isFavorite = false;
+  UpComingMovies({this.isFavorite});
 
-  Results.fromJson(Map<String, dynamic> json) {
+  UpComingMovies.fromJson(Map<String, dynamic> json) {
     title = json['title'];
-    urlImage = complet + json['poster_path'];
+    urlImage = json['poster_path'];
     data = json['release_date'];
     rating = json['vote_average'];
     resumo = json['overview'];
-    print(resumo);
+    id = json['id'];
   }
 }

@@ -1,12 +1,27 @@
 import 'package:appmovie/api.dart';
+import 'package:appmovie/internal_storage.dart';
+import 'package:appmovie/internal_storage_adapter.dart';
 import 'package:appmovie/movie.dart';
 
 class MovieModel {
-  Future<Movie> _movie;
+  List<UpComingMovies> _movies = [];
+  var api = MovieAPI();
+  int? id;
+  String? title;
+  String? fav;
+  final InternalStorageAdapter internalStorage = InternalStorage();
+  List<UpComingMovies> get movies => _movies;
 
-  Future<Movie> get movie => _movie;
+  fetchMovie(int page) async {
+    var up = await MovieAPI().fetchMovie(page);
+    _movies.addAll(up.upcomingMovies!);
+  }
 
-  fetchMovie() {
-    _movie = MovieAPI().fetchMovie();
+  saveFav(id) {
+    internalStorage.saveFav(id!, title!);
+  }
+
+  Future<String?> getFav(int id) async {
+    return internalStorage.getFav(id);
   }
 }

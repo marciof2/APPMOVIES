@@ -3,6 +3,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
    <application
+        android:usesCleartextTraffic="true"
         android:label="appmovie"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -40,4 +41,5 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+    
 </manifest>
