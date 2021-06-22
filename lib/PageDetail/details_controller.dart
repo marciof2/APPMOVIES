@@ -15,20 +15,8 @@ class MovieDetailViewModel {
 
   final InternalStorageAdapter secureStorage = SecureStorage();
 
-  String? isFav;
-  IconData? favorite = Icons.favorite_border;
-
-  toggleFavorite(int id) {
-    favorite = isFav != null ? Icons.favorite : Icons.favorite_border;
-
-    if (favorite == Icons.favorite_border) {
-      saveFav(id);
-      return favorite = Icons.favorite;
-    } else {
-      delFav(id);
-      return favorite = Icons.favorite_border;
-    }
-  }
+  late String? isFav;
+  IconData? favorite;
 
   void getMovieDetail(int id) {
     _model.getMovieDetail(id);
@@ -39,11 +27,21 @@ class MovieDetailViewModel {
     });
   }
 
+  toggleFavorite(int id) {
+    favorite = isFav != null ? Icons.favorite : Icons.favorite_border;
+
+    if (favorite == Icons.favorite_border) {
+      saveFav(id);
+    } else {
+      delFav(id);
+    }
+  }
+
   saveFav(int id) {
     secureStorage.saveFav(id);
   }
 
-  Future<String?> getFav(int id) async {
+  Future<String?> getFav(id) async {
     return await secureStorage.getFav(id);
   }
 

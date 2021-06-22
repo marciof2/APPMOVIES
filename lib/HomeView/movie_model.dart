@@ -18,7 +18,6 @@ class MovieModel {
 
   void saveFav(id) {
     internalStorage.saveFav(id);
-    print('object');
   }
 
   void delFav(int id) async {

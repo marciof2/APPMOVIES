@@ -32,9 +32,6 @@ class _OverviewState extends State<Overview> {
                 return CircularProgressIndicator();
               }
               if (snapshot.hasData) {
-                //iconFav = viewModel.isFavorite != null
-                //? Icons.favorite
-                // : Icons.favorite_border;
                 return SingleChildScrollView(
                   child: Stack(
                     children: [
