@@ -16,15 +16,17 @@ class MovieDetailViewModel {
   final InternalStorageAdapter secureStorage = SecureStorage();
 
   String? isFav;
-  IconData? favorite;
+  IconData? favorite = Icons.favorite_border;
 
   toggleFavorite(int id) {
     favorite = isFav != null ? Icons.favorite : Icons.favorite_border;
 
     if (favorite == Icons.favorite_border) {
       saveFav(id);
+      return favorite = Icons.favorite;
     } else {
       delFav(id);
+      return favorite = Icons.favorite_border;
     }
   }
 
