@@ -1,7 +1,7 @@
 abstract class InternalStorageAdapter {
-  void saveFav(String id, String movieTitle);
+  saveFav(int id);
 
-  void delFav(int id);
+  delFav(int id);
 
   Future<String?> getFav(int id);
 }

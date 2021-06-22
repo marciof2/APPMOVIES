@@ -1,10 +1,9 @@
 import 'dart:ui';
-import 'package:appmovie/internal_storage.dart';
+import 'package:appmovie/HomeView/movie_controller.dart';
+import 'package:appmovie/Storage/secure_storage.dart';
 import 'package:appmovie/movie.dart';
-import 'package:appmovie/movie_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'movie.dart';
 
 class MovieView extends StatefulWidget {
   @override
@@ -201,8 +200,8 @@ class ContainerMovie extends StatelessWidget {
   final resumo;
   final data;
   final title;
-  final id;
-  const ContainerMovie(
+  var id;
+  ContainerMovie(
       this.image, this.rating, this.resumo, this.data, this.title, this.id);
 
   @override
@@ -258,9 +257,9 @@ class Overview extends StatefulWidget {
 }
 
 class _OverviewState extends State<Overview> {
-  IconData? isFav = Icons.star_outline;
   @override
   Widget build(BuildContext context) {
+    var controller = MovieController();
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.blueGrey[600],
@@ -333,21 +332,28 @@ class _OverviewState extends State<Overview> {
                                   fontSize: 20,
                                   fontWeight: FontWeight.w800),
                             ),
-                          )
-                          //FAVORITE
-                          ,
-                          IconButton(
-                            icon: Icon(isFav),
-                            onPressed: () {
-                              InternalStorage()
-                                  .saveFav('$widget.id', widget.title);
-                              setState(() {
-                                isFav = InternalStorage().fav == true
-                                    ? Icons.star_outline
-                                    : Icons.star;
-                              });
-                            },
                           ),
+                          //FAVORITE *Não funcional*
+                          IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  var isFavorite = SecureStorage().isFavorite;
+                                  if (isFavorite == false) {
+                                    SecureStorage().saveFav(widget.id);
+                                    print('SALVANDO');
+                                    isFavorite = true;
+                                  } else {
+                                    SecureStorage().delFav(widget.id);
+                                    print('DELETANDO');
+                                    print(isFavorite);
+                                  }
+                                });
+                              },
+                              icon: Icon(
+                                SecureStorage().isFavorite == false
+                                    ? Icons.favorite_border
+                                    : Icons.favorite,
+                              )),
                         ]),
                   ),
                   Text(widget.resumo,
