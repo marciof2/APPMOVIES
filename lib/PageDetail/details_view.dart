@@ -115,11 +115,14 @@ class _OverviewState extends State<Overview> {
                                           : Icons.favorite_border)),
                                 ]),
                           ),
-                          Text('${movie.resumo}',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold)),
+                          Container(
+                            padding: EdgeInsets.all(5),
+                            child: Text('${movie.resumo}',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold)),
+                          ),
                         ],
                       ),
                     ],
