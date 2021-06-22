@@ -18,4 +18,15 @@ class MovieAPI {
       return Future.error('Tente Novamente');
     }
   }
+
+  Future<MovieDetail> getMovieDetail(int id) async {
+    final response = await http.get(Uri.https('api.themoviedb.org',
+        '/3/movie/$id', {'api_key': 'a5bc05fb630c9b7fdc560033345fa13e'}));
+
+    if (response.statusCode == 200) {
+      return MovieDetail.fromJson(jsonDecode(response.body));
+    } else {
+      return Future.error('Movie not Found');
+    }
+  }
 }
