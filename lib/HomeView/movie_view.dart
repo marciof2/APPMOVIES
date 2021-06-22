@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:appmovie/HomeView/movie_controller.dart';
+import 'package:appmovie/PageDetail/details_view.dart';
 import 'package:appmovie/Storage/secure_storage.dart';
 import 'package:appmovie/movie.dart';
 import 'package:flutter/material.dart';
@@ -209,11 +210,7 @@ class ContainerMovie extends StatelessWidget {
     return Center(
       child: InkWell(
         onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      Overview(image, rating, resumo, data, title, id)));
+          Navigator.pushNamed(context, 'overview', arguments: id);
         },
         //CAPA
         child: Container(
@@ -235,135 +232,6 @@ class ContainerMovie extends StatelessWidget {
                   ? 'https://image.tmdb.org/t/p/w300' + image
                   : ' '),
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class Overview extends StatefulWidget {
-  final title;
-  final rating;
-  final resumo;
-  final data;
-  final image;
-  final id;
-  Overview(
-      this.image, this.rating, this.resumo, this.data, this.title, this.id);
-
-  @override
-  _OverviewState createState() => _OverviewState();
-}
-
-class _OverviewState extends State<Overview> {
-  @override
-  Widget build(BuildContext context) {
-    var controller = MovieController();
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.blueGrey[600],
-        appBar: AppBar(
-          backgroundColor: Colors.red[300],
-          title: Text(widget.title),
-        ),
-        body: SingleChildScrollView(
-          child: Stack(
-            children: [
-              Column(
-                children: [
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.7,
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage(widget.image != null
-                                ? 'https://image.tmdb.org/t/p/w300' +
-                                    widget.image
-                                : ' '),
-                            fit: BoxFit.cover)),
-                  ),
-                  Container(
-                    color: Colors.red[300],
-                    width: MediaQuery.of(context).size.width,
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          //RATING
-                          Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle, color: Colors.black),
-                            child: Center(
-                              child: Container(
-                                width: 45,
-                                height: 45,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.greenAccent),
-                                child: Center(
-                                  child: Container(
-                                    width: 40,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.black),
-                                    child: Center(
-                                      child: Text(
-                                        '${widget.rating}',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w800),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          //DATA
-                          Container(
-                            child: Text(
-                              widget.data,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w800),
-                            ),
-                          ),
-                          //FAVORITE *Não funcional*
-                          IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  var isFavorite = SecureStorage().isFavorite;
-                                  if (isFavorite == false) {
-                                    SecureStorage().saveFav(widget.id);
-                                    print('SALVANDO');
-                                    isFavorite = true;
-                                  } else {
-                                    SecureStorage().delFav(widget.id);
-                                    print('DELETANDO');
-                                    print(isFavorite);
-                                  }
-                                });
-                              },
-                              icon: Icon(
-                                SecureStorage().isFavorite == false
-                                    ? Icons.favorite_border
-                                    : Icons.favorite,
-                              )),
-                        ]),
-                  ),
-                  Text(widget.resumo,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold)),
-                ],
-              ),
-            ],
           ),
         ),
       ),
