@@ -1,6 +1,4 @@
-import 'package:appmovie/HomeView/movie_controller.dart';
 import 'package:appmovie/PageDetail/details_controller.dart';
-import 'package:appmovie/Storage/secure_storage.dart';
 import 'package:appmovie/movie.dart';
 import 'package:flutter/material.dart';
 
