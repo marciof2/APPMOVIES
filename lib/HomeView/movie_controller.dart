@@ -3,19 +3,24 @@ import 'package:appmovie/HomeView/movie_model.dart';
 import 'package:appmovie/movie.dart';
 
 class MovieController {
-  final model = MovieModel();
+  MovieModel model = MovieModel();
   int page = 1;
-  var isFavorite;
+  StreamController<List<TopRated>> streamTopRated = StreamController();
   StreamController<List<UpComingMovies>> streamLista = StreamController();
-  loadMovie() async {
-    await model.fetchMovie(page);
 
+  loadUpComingMovie() async {
+    await model.fetchMovie(page);
     streamLista.add(model.movies);
   }
 
-  newPage() {
+  loadTopRated() async {
+    await model.getTopRated(page);
+    streamTopRated.add(model.topMovies);
+  }
+
+  newPageUpComingMovies() {
     page++;
-    loadMovie();
+    loadUpComingMovie();
   }
 
   saveFav(id) {

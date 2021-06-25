@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:appmovie/PageDetail/details_model.dart';
 import 'package:appmovie/Storage/internal_storage_adapter.dart';
 import 'package:appmovie/Storage/secure_storage.dart';

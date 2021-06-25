@@ -22,7 +22,7 @@ class _OverviewState extends State<Overview> {
         backgroundColor: Colors.blueGrey[600],
         appBar: AppBar(
           backgroundColor: Colors.red[300],
-          // title: Text('${id.title}'),
+          title: Center(child: Text('DETALHES')),
         ),
         body: StreamBuilder<MovieDetail>(
             stream: viewModel.streamMovies.stream,
@@ -37,6 +37,7 @@ class _OverviewState extends State<Overview> {
                     children: [
                       Column(
                         children: [
+                          //FOTO FILME
                           Container(
                             height: MediaQuery.of(context).size.height * 0.7,
                             width: MediaQuery.of(context).size.width * 0.7,
@@ -48,6 +49,7 @@ class _OverviewState extends State<Overview> {
                                         : ' '),
                                     fit: BoxFit.cover)),
                           ),
+                          //CONTAINER/LINHA - RATE/DATA/BOTAO FAV
                           Container(
                             color: Colors.red[300],
                             width: MediaQuery.of(context).size.width,
@@ -103,7 +105,7 @@ class _OverviewState extends State<Overview> {
                                     ),
                                   ),
 
-                                  //FAVORITE *Não funcional*
+                                  //FAVORITE
                                   IconButton(
                                       onPressed: () {
                                         setState(() {
@@ -115,6 +117,7 @@ class _OverviewState extends State<Overview> {
                                           : Icons.favorite_border)),
                                 ]),
                           ),
+                          //TEXTO SINOPSE
                           Container(
                             padding: EdgeInsets.all(5),
                             child: Text('${movie.resumo}',
@@ -128,6 +131,7 @@ class _OverviewState extends State<Overview> {
                     ],
                   ),
                 );
+                //CONTAINER RETORNANDO ERRO
               } else {
                 return Container(
                   child: Text('ERRO'),

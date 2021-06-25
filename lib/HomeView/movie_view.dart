@@ -16,7 +16,7 @@ class _MyHomePageState extends State<MovieView> {
   @override
   void initState() {
     super.initState();
-    controller.loadMovie();
+    controller.loadUpComingMovie();
   }
 
   @override
@@ -69,7 +69,7 @@ class _MyHomePageState extends State<MovieView> {
                         itemBuilder: (context, index) {
                           var count = snapshot.data![index];
                           if (index == snapshot.data!.length - 5) {
-                            controller.newPage();
+                            controller.newPageUpComingMovies();
                             print('Chegamos no final da lista ');
                           }
                           return Column(
@@ -160,7 +160,7 @@ class _MyHomePageState extends State<MovieView> {
                   return Center(
                     child: TextButton(
                       onPressed: () {
-                        controller.loadMovie();
+                        controller.loadUpComingMovie();
                       },
                       child: Text('Tentar Novamente'),
                     ),
