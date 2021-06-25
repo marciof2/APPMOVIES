@@ -111,7 +111,6 @@ class _MyHomePageState extends State<MovieView> {
                                   ),
                                   //RATING
                                   Positioned(
-                                    left: 10,
                                     child: Container(
                                       width: 50,
                                       height: 50,
@@ -124,17 +123,21 @@ class _MyHomePageState extends State<MovieView> {
                                           height: 45,
                                           decoration: BoxDecoration(
                                               shape: BoxShape.circle,
-                                              color: Colors.greenAccent),
+                                              color: count.rating >= 7
+                                                  ? Colors.greenAccent
+                                                  : Colors.yellow),
                                           child: Center(
                                             child: Container(
                                               width: 40,
                                               height: 40,
                                               decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
-                                                  color: Colors.black),
+                                                  color: Colors.blueGrey[900]),
                                               child: Center(
                                                 child: Text(
-                                                  '${count.rating}',
+                                                  count.rating != 0
+                                                      ? '${count.rating}'
+                                                      : ('Null'),
                                                   style: TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 20,
