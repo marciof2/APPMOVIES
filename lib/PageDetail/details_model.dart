@@ -1,4 +1,4 @@
-import 'package:appmovie/api.dart';
+import 'package:appmovie/API/api.dart';
 import 'package:appmovie/movie.dart';
 
 class MovieDetailModel {

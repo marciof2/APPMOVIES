@@ -1,6 +1,4 @@
-import 'package:appmovie/HomeView/movie_controller.dart';
 import 'package:appmovie/PageDetail/details_controller.dart';
-import 'package:appmovie/Storage/secure_storage.dart';
 import 'package:appmovie/movie.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +20,7 @@ class _OverviewState extends State<Overview> {
         backgroundColor: Colors.blueGrey[600],
         appBar: AppBar(
           backgroundColor: Colors.red[300],
-          // title: Text('${id.title}'),
+          title: Center(child: Text('DETALHES')),
         ),
         body: StreamBuilder<MovieDetail>(
             stream: viewModel.streamMovies.stream,
@@ -32,14 +30,12 @@ class _OverviewState extends State<Overview> {
                 return CircularProgressIndicator();
               }
               if (snapshot.hasData) {
-                //iconFav = viewModel.isFavorite != null
-                //? Icons.favorite
-                // : Icons.favorite_border;
                 return SingleChildScrollView(
                   child: Stack(
                     children: [
                       Column(
                         children: [
+                          //FOTO FILME
                           Container(
                             height: MediaQuery.of(context).size.height * 0.7,
                             width: MediaQuery.of(context).size.width * 0.7,
@@ -51,6 +47,7 @@ class _OverviewState extends State<Overview> {
                                         : ' '),
                                     fit: BoxFit.cover)),
                           ),
+                          //CONTAINER/LINHA - RATE/DATA/BOTAO FAV
                           Container(
                             color: Colors.red[300],
                             width: MediaQuery.of(context).size.width,
@@ -71,7 +68,9 @@ class _OverviewState extends State<Overview> {
                                         height: 45,
                                         decoration: BoxDecoration(
                                             shape: BoxShape.circle,
-                                            color: Colors.greenAccent),
+                                            color: movie.rating >= 7
+                                                ? Colors.greenAccent
+                                                : Colors.yellow),
                                         child: Center(
                                           child: Container(
                                             width: 40,
@@ -81,7 +80,9 @@ class _OverviewState extends State<Overview> {
                                                 color: Colors.black),
                                             child: Center(
                                               child: Text(
-                                                '${movie.rating}',
+                                                movie.rating == 0
+                                                    ? 'Null'
+                                                    : '${movie.rating}',
                                                 style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 20,
@@ -106,7 +107,7 @@ class _OverviewState extends State<Overview> {
                                     ),
                                   ),
 
-                                  //FAVORITE *Não funcional*
+                                  //FAVORITE
                                   IconButton(
                                       onPressed: () {
                                         setState(() {
@@ -118,16 +119,21 @@ class _OverviewState extends State<Overview> {
                                           : Icons.favorite_border)),
                                 ]),
                           ),
-                          Text('${movie.resumo}',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold)),
+                          //TEXTO SINOPSE
+                          Container(
+                            padding: EdgeInsets.all(5),
+                            child: Text('${movie.resumo}',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold)),
+                          ),
                         ],
                       ),
                     ],
                   ),
                 );
+                //CONTAINER RETORNANDO ERRO
               } else {
                 return Container(
                   child: Text('ERRO'),
