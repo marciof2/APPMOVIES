@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../movie.dart';
 
 class MovieAPI {
-  Future<Lancamentos> fetchMovie(int page) async {
+  Future<Lancamentos> getUpcomingMovies(int page) async {
     final response = await http.get(
       Uri.https('api.themoviedb.org', '/3/movie/upcoming', {
         'api_key': 'a5bc05fb630c9b7fdc560033345fa13e',
@@ -46,6 +46,22 @@ class MovieAPI {
       return MovieDetail.fromJson(jsonDecode(response.body));
     } else {
       return Future.error('Movie not Found');
+    }
+  }
+
+  Future<PopularMovies> getPopular(int page) async {
+    final response = await http.get(
+      Uri.https('api.themoviedb.org', '/3/movie/popular', {
+        'api_key': 'a5bc05fb630c9b7fdc560033345fa13e',
+        'page': '$page',
+        'language': 'pt-BR'
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return PopularMovies.fromJson(jsonDecode(response.body));
+    } else {
+      return Future.error('Tente Novamente');
     }
   }
 }

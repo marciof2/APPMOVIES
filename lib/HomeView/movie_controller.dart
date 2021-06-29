@@ -7,10 +7,16 @@ class MovieController {
   int page = 1;
   StreamController<List<TopRated>> streamTopRated = StreamController();
   StreamController<List<UpComingMovies>> streamLista = StreamController();
+  StreamController<List<Popular>> streamPopular = StreamController();
 
   loadUpComingMovie() async {
-    await model.fetchMovie(page);
+    await model.getUpcomingMovies(page);
     streamLista.add(model.movies);
+  }
+
+  loadPopular() async {
+    await model.getPopularMovies(page);
+    streamPopular.add(model.popularMovies);
   }
 
   loadTopRated() async {
@@ -18,20 +24,18 @@ class MovieController {
     streamTopRated.add(model.topMovies);
   }
 
+  newPopularPage() {
+    page++;
+    loadPopular();
+  }
+
   newPageUpComingMovies() {
     page++;
     loadUpComingMovie();
   }
 
-  saveFav(id) {
-    model.saveFav(id);
-  }
-
-  delFav(id) {
-    model.delFav(id);
-  }
-
-  Future<String?> getFav(id) {
-    return model.getFav(id);
+  newPageTopRated() {
+    page++;
+    loadTopRated();
   }
 }

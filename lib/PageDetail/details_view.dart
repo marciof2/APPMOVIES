@@ -68,7 +68,9 @@ class _OverviewState extends State<Overview> {
                                         height: 45,
                                         decoration: BoxDecoration(
                                             shape: BoxShape.circle,
-                                            color: Colors.greenAccent),
+                                            color: movie.rating >= 7
+                                                ? Colors.greenAccent
+                                                : Colors.yellow),
                                         child: Center(
                                           child: Container(
                                             width: 40,
@@ -78,7 +80,9 @@ class _OverviewState extends State<Overview> {
                                                 color: Colors.black),
                                             child: Center(
                                               child: Text(
-                                                '${movie.rating}',
+                                                movie.rating == 0
+                                                    ? 'Null'
+                                                    : '${movie.rating}',
                                                 style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 20,

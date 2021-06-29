@@ -41,7 +41,7 @@ class UpComingMovies {
 
   UpComingMovies.fromJson(Map<String, dynamic> json) {
     title = json['title'];
-    urlImage = json['poster_path'];
+    urlImage = json['backdrop_path'];
     data = json['release_date'];
     rating = json['vote_average'];
     resumo = json['overview'];
@@ -72,7 +72,38 @@ class TopRated {
 
   TopRated.fromJson(Map<String, dynamic> json) {
     title = json['title'];
-    urlImage = json['poster_path'];
+    urlImage = json['backdrop_path'];
+    data = json['release_date'];
+    rating = json['vote_average'];
+    resumo = json['overview'];
+    id = json['id'];
+  }
+}
+
+class PopularMovies {
+  List<Popular>? popularMoviesList;
+
+  PopularMovies.fromJson(Map<String, dynamic> json) {
+    var arrayMovie = json['results'] as List;
+
+    popularMoviesList = arrayMovie.map((item) {
+      return Popular.fromJson(item);
+    }).toList();
+  }
+}
+
+class Popular {
+  String? complet = 'https://image.tmdb.org/t/p/w300';
+  String? title;
+  String? urlImage;
+  String? data;
+  String? resumo;
+  var id;
+  var rating;
+
+  Popular.fromJson(Map<String, dynamic> json) {
+    title = json['title'];
+    urlImage = json['backdrop_path'];
     data = json['release_date'];
     rating = json['vote_average'];
     resumo = json['overview'];
